@@ -1,0 +1,181 @@
+#include <iostream>
+
+struct Node
+{
+   Node(int elem)
+      : elem(elem)
+      , next(nullptr)
+   {
+   }
+
+   int elem;
+   Node* next;
+};
+
+class LinkedList
+{
+public:
+   LinkedList() 
+      : head(nullptr)
+      , tail(nullptr)
+      , length(0)
+   {
+   }
+
+   ~LinkedList()
+   {
+      Node* current = head;
+
+      while (current)
+      {
+         Node* next = current->next;
+         delete current;
+
+         current = next;
+      }
+   }
+
+   void addAtHead(int elem)
+   {
+      if (!head)
+      {
+         head = new Node(elem);
+         tail = head;
+         ++length;
+         return;
+      }
+
+      Node* newNode = new Node(elem);
+      newNode->next = head;
+
+      head = newNode;
+      ++length;
+   }
+
+   void addAtTail(int elem)
+   {
+      if (!head)
+      {
+         head = new Node(elem);
+         tail = head;
+         ++length;
+         return;
+      }
+
+      Node* newNode = new Node(elem);
+      tail->next = newNode;
+
+      tail = newNode;
+      ++length;
+   }
+
+   void add(int elem)
+   {
+      if (!head)
+         addAtHead(elem);
+      else
+         addAtTail(elem);
+   }
+
+   void addAtIndex(size_t index, int elem)
+   {
+      if(index > length)
+         std::cout << "WARNING!!! No such index within LinkedList, index: " << index << ", LinkedList length: " << length << std::endl;
+
+      if (index == 0)
+         addAtHead(elem);
+      else if (index == length)
+         addAtTail(elem);
+      else
+      {
+         Node* current = head;
+
+         for (int i = 0; i < index - 1; ++i)
+            current = current->next;
+
+         Node* newNode = new Node(elem);
+         newNode->next = current->next;
+         current->next = newNode;
+
+         ++length;
+      }
+   }
+
+   void deleteAtHead()
+   {
+      if (head)
+      {
+         Node* deletedNode = head;
+         head = head->next;
+
+         delete deletedNode;
+
+         --length;
+      }
+   }
+
+   void deleteAtTail()
+   {
+      if (tail)
+      {
+         Node* newTail = head;
+
+         for (int i = 1; i < length - 1; ++i)
+            newTail = newTail->next;
+
+         delete newTail->next;
+         tail = newTail;
+         tail->next = nullptr;
+
+         --length;
+      }
+   }
+
+   void deleteAtIndex(size_t index)
+   {
+      if (index > length)
+         std::cout << "WARNING!!! No such index within LinkedList, index: " << index << ", LinkedList length: " << length << std::endl;
+
+      if (index == 0)
+         deleteAtHead();
+      else if (index == length)
+         deleteAtTail();
+      else
+      {
+         Node* current = head;
+
+         for (int i = 0; i < index - 1; ++i)
+            current = current->next;
+
+         current->next = current->next->next;
+      }
+   }
+
+private:
+   Node* head;
+   Node* tail;
+   size_t length;
+};
+
+
+void main()
+{
+   {
+      LinkedList ll;
+
+      ll.addAtHead(1);
+      ll.addAtHead(2);
+      ll.addAtTail(3);
+      ll.add(4);
+      ll.add(5);
+
+      ll.addAtIndex(3, 7);
+
+      ll.deleteAtHead();
+      ll.deleteAtTail();
+
+      ll.deleteAtIndex(2);
+   }
+
+
+}
