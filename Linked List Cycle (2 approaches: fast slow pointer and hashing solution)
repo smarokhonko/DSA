@@ -7,6 +7,8 @@
  * };
  */
  
+ //================== Fast and slow pointers ==============================================================================
+ 
  //O(n) - time complexity
  //O(1) - space complexity
  
@@ -30,5 +32,29 @@ public:
        }
 
        return false;
+    }
+};
+
+ //================== Hashing solution ==============================================================================
+ 
+ //O(n) - time complexity
+ //O(n) - space complexity
+ 
+class Solution {
+public:
+    bool hasCycle(ListNode *head)
+    {
+      unordered_set<ListNode*> seen;
+
+      while(head)
+      {
+          if(seen.find(head) != seen.end())
+            return true;
+
+          seen.insert(head);  
+          head = head->next;
+      }
+
+      return false;
     }
 };
